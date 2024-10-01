@@ -1,201 +1,188 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(ProfilePageApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
+class ProfilePageApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Pengenalan Diri',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color.fromARGB(255, 73, 110, 140),
-        ),
-        useMaterial3: true,
-      ),
-      home: const MyHomePage(),
+      debugShowCheckedModeBanner: false,
+      home: ProfilePage(),
     );
   }
 }
 
-class MyHomePage extends StatelessWidget {
-  const MyHomePage({super.key});
-
+class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.pink[50], // Ubah background menjadi pink muda
       appBar: AppBar(
-        title: const Center(
-          child: Text(
-            'Pengenalan Diri',
-            style: TextStyle(color: Colors.white),
-          ),
-        ),
-        backgroundColor: const Color.fromARGB(255, 0, 101, 64),
+        elevation: 0,
+        backgroundColor: const Color.fromARGB(255, 220, 17, 84), // Ubah warna AppBar menjadi pink
+        title: Text('Profile Page', style: TextStyle(color: Colors.white)),
+        centerTitle: true,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: ListView(
+      body: SingleChildScrollView(
+        child: Column(
           children: [
-            const InfoCard(title: 'Nama', content: 'Zivana Afra Yulianto'),
-            const PhotoWidget(),
-            const InfoCard(title: 'NIM', content: '2211104039'),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
-                Flexible(child: InfoBox(content: 'Umur: 21 th')),
-                SizedBox(width: 20),
-                Flexible(child: InfoBox(content: 'Gol. Darah: B')),
-              ],
-            ),
-            const SizedBox(height: 10),
-            const InfoCard(title: 'Hobby', content: ''),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
-                Flexible(child: HobbyBox(hobby: 'Sleep')),
-                SizedBox(width: 10),
-                Flexible(child: HobbyBox(hobby: 'Scroll')),
-                SizedBox(width: 10),
-                Flexible(child: HobbyBox(hobby: 'Pet Carl')),
-              ],
-            ),
-            const SizedBox(height: 20),
-            const InfoCard(title: 'Alamat', content: 'Shappire Madina Blok H6'),
+            _buildHeader(),
+            _buildInfoSection(),
+            _buildStatsSection(),
+            _buildInterestsSection(),
           ],
         ),
       ),
     );
   }
-}
 
-class InfoCard extends StatelessWidget {
-  final String title;
-  final String content;
+  Widget _buildHeader() {
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        Container(
+          height: 250,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [const Color.fromARGB(255, 235, 27, 96), const Color.fromARGB(255, 228, 107, 147)], // Gradien warna pink
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(30),
+              bottomRight: Radius.circular(30),
+            ),
+          ),
+        ),
+        Positioned(
+          top: 150,
+          child: CircleAvatar(
+            radius: 60,
+            backgroundColor: Colors.white,
+            child: CircleAvatar(
+              radius: 55,
+              backgroundImage: AssetImage(
+                  '../assets/photo.jpg'), // Pastikan gambar profil lokal Anda ada di folder assets
+            ),
+          ),
+        ),
+      ],
+    );
+  }
 
-  const InfoCard({super.key, required this.title, required this.content});
-
-  @override
-  Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 10),
-      padding: const EdgeInsets.all(20),
-      width: size.width * 0.8,
-      decoration: BoxDecoration(
-        color: const Color.fromARGB(255, 0, 101, 64),
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.5),
-            blurRadius: 5,
-            offset: const Offset(0, 3),
+  Widget _buildInfoSection() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 80, bottom: 20),
+      child: Column(
+        children: [
+          Text(
+            "Zivana Afra Yulianto",
+            style: TextStyle(
+              fontSize: 28,
+              fontWeight: FontWeight.bold,
+              color: Colors.black87,
+            ),
+          ),
+          SizedBox(height: 5),
+          Text(
+            "Mobile Developer",
+            style: TextStyle(
+              fontSize: 18,
+              color: Colors.grey[700],
+            ),
+          ),
+          SizedBox(height: 15),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.location_on,
+                  color: Colors.pinkAccent), // Warna ikon pink
+              SizedBox(width: 5),
+              Text(
+                "Purwokerto, Banyumas",
+                style: TextStyle(fontSize: 16, color: Colors.grey[600]),
+              ),
+            ],
           ),
         ],
       ),
-      child: Center(
-        child: Text(
-          '$title : $content',
-          style: const TextStyle(
-            fontSize: 24,
-            color: Colors.white,
+    );
+  }
+
+  Widget _buildStatsSection() {
+    return Padding(
+      padding: const EdgeInsets.all(20.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          _buildStatItem("Projects", "25"),
+          _buildStatItem("Followers", "5.2K"),
+          _buildStatItem("Following", "300"),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildStatItem(String label, String count) {
+    return Column(
+      children: [
+        Text(
+          count,
+          style: TextStyle(
+            fontSize: 22,
             fontWeight: FontWeight.bold,
-            letterSpacing: 1.2,
+            color: Colors.pink, // Warna teks statistik pink
           ),
         ),
+        SizedBox(height: 5),
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: 16,
+            color: Colors.grey[600],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildInterestsSection() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "Interests",
+            style: TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+              color: Colors.black87,
+            ),
+          ),
+          SizedBox(height: 10),
+          Wrap(
+            spacing: 10,
+            children: [
+              _buildChip("Programming"),
+              _buildChip("Music"),
+              _buildChip("Traveling"),
+              _buildChip("Movie"),
+            ],
+          ),
+        ],
       ),
     );
   }
-}
 
-class InfoBox extends StatelessWidget {
-  final String content;
-
-  const InfoBox({super.key, required this.content});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 10),
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: Colors.green,
-          width: 4.0,
-        ),
-      ),
-      child: Center(
-        child: Text(
-          content,
-          style: const TextStyle(
-            fontSize: 24,
-            color: Colors.black,
-            fontWeight: FontWeight.w600,
-            letterSpacing: 1.0,
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class HobbyBox extends StatelessWidget {
-  final String hobby;
-
-  const HobbyBox({super.key, required this.hobby});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 10),
-      padding: const EdgeInsets.all(30),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(30),
-        border: Border.all(
-          color: Colors.green,
-          width: 4.0,
-        ),
-      ),
-      constraints: const BoxConstraints(maxWidth: 150),
-      child: Center(
-        child: Text(
-          hobby,
-          style: const TextStyle(
-            fontSize: 20,
-            color: Colors.black,
-            overflow: TextOverflow.ellipsis,
-          ),
-          textAlign: TextAlign.center,
-        ),
-      ),
-    );
-  }
-}
-
-class PhotoWidget extends StatelessWidget {
-  const PhotoWidget({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 10),
-      padding: const EdgeInsets.all(20),
-      child: ClipOval(
-        child: Image.asset(
-          '../assets/photo.jpg',
-          width: size.width * 1,
-          height: size.width * 1,
-          fit: BoxFit.cover,
-        ),
-      ),
+  Widget _buildChip(String label) {
+    return Chip(
+      label: Text(label),
+      backgroundColor:
+          Colors.pink.withOpacity(0.1), // Warna chip dengan pink muda
+      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
     );
   }
 }
