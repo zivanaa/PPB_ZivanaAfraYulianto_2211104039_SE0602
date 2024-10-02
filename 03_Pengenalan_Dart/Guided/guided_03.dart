@@ -1,6 +1,6 @@
 void main() {
   // Menggunakan var
-  print('=====ariable=====');
+  print('=====variable=====');
   var name = "Alice"; // Tipe data String
   var age = 25; // Tipe data Integer
 
@@ -12,7 +12,7 @@ void main() {
   print("hari Ini: $firstName $lastName");
 
   //if-else
-  print('=====if elsa=====');
+  print('=====if else=====');
   var open = 8;
   var close = 17;
   var now = 20;
